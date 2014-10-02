@@ -160,7 +160,7 @@ def check(client, entity_id, suppress_output=False, login_time=False,
     try:
         resp = _check.intermit(resp,up)
     except Exception, err:
-        print_status(nagios, "UNKNOWN", nagios_args, entity_id,
+        print_status(nagios, "FAILURE", nagios_args, entity_id,
                      suppress_output, _login_time, "%s" % err, dump)
         return RETURN_CODE["FAILURE"]
     else:
