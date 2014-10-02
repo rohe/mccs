@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import subprocess
-import os
+import sys
 
 from saml2 import config
 from saml2.attribute_converter import ac_factory
@@ -40,20 +40,18 @@ mds = MetadataStore(ONTS.values(), ATTRCONV, sec_config,
 
 mds.imp({"mdfile": ["swamid2.md"]})
 
+# Nagios or or Not Nagios output based on command argument
+NAGIOS = False
+if len(sys.argv) > 1:
+    if sys.argv[1].lower() == "nagios":
+        NAGIOS = True
+
 for entity_id in mds.identity_providers():
     print "## %s ##" % entity_id
-    p = subprocess.Popen(['./mccs.py', "-N", "-e", entity_id, "conf"],
-                         stdout=subprocess.PIPE)
+    if NAGIOS:
+        p = subprocess.Popen(['./mccs.py', "-N", "-e", entity_id, "conf"],
+                             stdout=subprocess.PIPE)
+    else:
+        p = subprocess.Popen(['./mccs.py', "-e", entity_id, "conf"],
+                             stdout=subprocess.PIPE)
     print p.stdout.read()
-#     f = os.tmpfile()
-#     p = subprocess.Popen(['./mccs.py', "-e", entity_id, "conf"], stdout=f)
-#     processes.append((p, f, entity_id))
-#     i += 1
-#     if i > 5:
-#         break
-#
-# for p, f, entity_id in processes:
-#     p.wait()
-#     f.seek(0)
-#     print entity_id, f.read()
-#     f.close()
