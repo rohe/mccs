@@ -47,7 +47,6 @@ if len(sys.argv) > 1:
         NAGIOS = True
 
 for entity_id in mds.identity_providers():
-    print "## %s ##" % entity_id
     if NAGIOS:
         p = subprocess.Popen(['./mccs.py', "-N", "-e", entity_id, "conf"],
                              stdout=subprocess.PIPE)

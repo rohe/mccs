@@ -97,7 +97,7 @@ class Check(object):
 NAGIOS_LINE = ("[{time}] PROCESS_SERVICE_CHECK_RESULT;{host};{svc};{code};{"
                "output}")
 
-RETURN_CODE = {"OK": 0, "WARNING": 1, "CRITICAL": 2, "UNKNOWN": 3}
+RETURN_CODE = {"OK": 0, "WARNING": 1, "CRITICAL": 2, "FAILURE": 3}
 
 
 def print_nagios_line(return_code, nagios_args, entity_id, output):
@@ -162,7 +162,7 @@ def check(client, entity_id, suppress_output=False, login_time=False,
     except Exception, err:
         print_status(nagios, "UNKNOWN", nagios_args, entity_id,
                      suppress_output, _login_time, "%s" % err, dump)
-        return RETURN_CODE["UNKNOWN"]
+        return RETURN_CODE["FAILURE"]
     else:
         if resp.status_code >= 400:
             print_status(nagios, "CRITICAL", nagios_args, entity_id,
